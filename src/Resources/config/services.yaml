@@ -1,0 +1,35 @@
+services:
+  _defaults:
+    autowire: true
+
+  OAS\Bridge\SymfonyBundle\BodyExtractor\Request\:
+    resource: '../../BodyExtractor/Request/*'
+    tags: ['oas.request_body_extractor']
+
+  OAS\Bridge\SymfonyBundle\BodyExtractor\Response\:
+    resource: '../../BodyExtractor/Response/*'
+    tags: ['oas.response_body_extractor']
+
+  OAS\Bridge\SymfonyBundle\BodyExtractor\RequestBodyExtractor:
+    arguments:
+      - !tagged oas.request_body_extractor
+
+  OAS\Bridge\SymfonyBundle\BodyExtractor\ResponseBodyExtractor:
+    arguments:
+      - !tagged oas.response_body_extractor
+
+  OAS\Bridge\SymfonyBundle\SpecProvider: ~
+
+  OAS\Bridge\SymfonyBundle\Annotation\Reader\AnnotationReader: ~
+
+  OAS\Bridge\SymfonyBundle\Annotation\Reader: '@OAS\Bridge\SymfonyBundle\Annotation\Reader\AnnotationReader'
+
+  OAS\Bridge\SymfonyBundle\Validation\RequestValidator: ~
+
+  OAS\Bridge\SymfonyBundle\Validation\ResponseValidator:
+    autowire: true
+    public: true
+
+  OAS\Validator:
+    factory: 'OAS\Bridge\SymfonyBundle\Validation\ValidatorFactory::create'
+    arguments: ['@OAS\Bridge\SymfonyBundle\Configuration']
