@@ -24,6 +24,6 @@ class JsonRequestBodyExtractor implements ContentTypeSpecificRequestBodyExtracto
 
     public function supports(string $contentType): bool
     {
-        return 0 === strpos($contentType, 'application/json');
+        return str_starts_with($contentType, 'application/json');
     }
 }
