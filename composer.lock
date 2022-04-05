@@ -378,16 +378,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oas-php/document.git",
-                "reference": "86dee4478f67d271e51c245d469991466f370ad9"
+                "reference": "e88662049a73a0e72f00e46143c7ce118cf84219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oas-php/document/zipball/86dee4478f67d271e51c245d469991466f370ad9",
-                "reference": "86dee4478f67d271e51c245d469991466f370ad9",
+                "url": "https://api.github.com/repos/oas-php/document/zipball/e88662049a73a0e72f00e46143c7ce118cf84219",
+                "reference": "e88662049a73a0e72f00e46143c7ce118cf84219",
                 "shasum": ""
             },
             "require": {
-                "biera/array-accessor": "1.0.1",
                 "ext-json": "*",
                 "nikic/iter": "^2.0",
                 "nikic/php-parser": "^4.10",
@@ -410,12 +409,12 @@
             "default-branch": true,
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "OAS\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "OAS\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -432,7 +431,7 @@
                 "issues": "https://github.com/oas-php/document/issues",
                 "source": "https://github.com/oas-php/document/tree/master"
             },
-            "time": "2021-11-26T12:07:09+00:00"
+            "time": "2022-04-05T11:05:30+00:00"
         },
         {
             "name": "oas-php/resolver",
