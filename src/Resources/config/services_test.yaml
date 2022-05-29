@@ -1,0 +1,6 @@
+services:
+  _defaults:
+    autowire: true
+
+  OAS\Bridge\SymfonyBundle\SpecProvider\CachedSpecProvider: ~
+  OAS\Bridge\SymfonyBundle\SpecProvider: '@OAS\Bridge\SymfonyBundle\SpecProvider\CachedSpecProvider'

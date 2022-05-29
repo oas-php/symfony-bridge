@@ -4,17 +4,25 @@ namespace OAS\Bridge\SymfonyBundle\DependencyInjection;
 
 use OAS\Bridge\SymfonyBundle\EventListener\OnControllerEventListener;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use OAS\Bridge\SymfonyBundle\Configuration as OASConfiguration;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Parameter;
 
 class OASExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
         $processedConfiguration = $this->processConfiguration(new Configuration(), $configs);
+
+        foreach ($processedConfiguration['specs'] as $spec) {
+            if (array_key_exists('resources_dir', $spec)) {
+                $container->addResource(new DirectoryResource($spec['resources_dir']));
+            }
+        }
 
         $this->registerConfiguration($container, $processedConfiguration);
         $this->registerListener($container);
@@ -23,12 +31,14 @@ class OASExtension extends Extension
 
     private function loadServices(ContainerBuilder $containerBuilder): void
     {
-        $loader = new YamlFileLoader(
-            $containerBuilder,
-            new FileLocator(__DIR__.'/../Resources/config')
-        );
+        $environment = $containerBuilder->getParameter('kernel.environment');
+        $loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__.'/../Resources/config'));
 
         $loader->load('services.yaml');
+
+        if ('test' === $environment) {
+            $loader->load('services_test.yaml');
+        }
     }
 
     private function registerConfiguration(ContainerBuilder $containerBuilder, array $processedConfiguration): void
@@ -37,7 +47,12 @@ class OASExtension extends Extension
             OASConfiguration::class,
             new Definition(
                 OASConfiguration::class,
-                [$processedConfiguration]
+                [
+                    array_merge(
+                        $processedConfiguration,
+                        ['cache_dir' => new Parameter('kernel.cache_dir')]
+                    )
+                ]
             )
         );
     }

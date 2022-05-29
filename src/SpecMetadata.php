@@ -4,15 +4,32 @@ namespace OAS\Bridge\SymfonyBundle;
 
 class SpecMetadata
 {
+    private string $name;
     private string $indexPath;
     private ?string $resolvePath;
-    private bool $buildCache;
+    private ?string $resourcesDir;
+    private bool $cache;
+    private bool $cachePartials;
 
-    public function __construct(string $indexPath, ?string $resolvePath, bool $buildCache)
-    {
+    public function __construct(
+        string $name,
+        string $indexPath,
+        ?string $resolvePath,
+        ?string $resourcesDir,
+        bool $cache,
+        bool $cachePartials
+    ) {
+        $this->name = $name;
         $this->indexPath = $indexPath;
+        $this->resourcesDir = $resourcesDir;
         $this->resolvePath = $resolvePath;
-        $this->buildCache = $buildCache;
+        $this->cache = $cache;
+        $this->cachePartials = $cachePartials;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function getIndexPath(): string
@@ -25,13 +42,23 @@ class SpecMetadata
         return $this->resolvePath;
     }
 
+    public function getResourcesDir(): ?string
+    {
+        return $this->resourcesDir;
+    }
+
     public function isResolvable(): bool
     {
         return !is_null($this->resolvePath);
     }
 
-    public function isCacheable(): bool
+    public function cache(): bool
     {
-        return $this->buildCache;
+        return $this->cache;
+    }
+
+    public function cachePartials(): bool
+    {
+        return $this->cachePartials;
     }
 }

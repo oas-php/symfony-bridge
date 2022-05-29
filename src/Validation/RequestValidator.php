@@ -38,7 +38,7 @@ class RequestValidator
 
     private function extractRequestBodySchema(Request $request, bool $isRequestBodyEmpty, string $operationId = null): ?Schema
     {
-        $spec = $this->specProvider->get();
+        $spec = $this->specProvider->get(null, $operationId);
 
         $operation = is_null($operationId)
             ? $spec->findOperation(

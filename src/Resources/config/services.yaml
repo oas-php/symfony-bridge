@@ -2,6 +2,10 @@ services:
   _defaults:
     autowire: true
 
+  OAS\Bridge\SymfonyBundle\Cache\:
+    resource: '../../Cache/*'
+    tags: ['kernel.cache_warmer']
+
   OAS\Bridge\SymfonyBundle\BodyExtractor\Request\:
     resource: '../../BodyExtractor/Request/*'
     tags: ['oas.request_body_extractor']
@@ -18,7 +22,8 @@ services:
     arguments:
       - !tagged oas.response_body_extractor
 
-  OAS\Bridge\SymfonyBundle\SpecProvider: ~
+  OAS\Bridge\SymfonyBundle\SpecProvider\SpecProvider: ~
+  OAS\Bridge\SymfonyBundle\SpecProvider: '@OAS\Bridge\SymfonyBundle\SpecProvider\SpecProvider'
 
   OAS\Bridge\SymfonyBundle\Annotation\Reader\AnnotationReader: ~
 

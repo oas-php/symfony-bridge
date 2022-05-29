@@ -37,14 +37,56 @@ class Configuration
         $specMetadataRaw = $this->configuration['specs'][$name];
 
         return new SpecMetadata(
+            $name,
             $specMetadataRaw['index_path'],
             $specMetadataRaw['resolve_path'] ?? null,
-            $specMetadataRaw['cache']
+            $specMetadataRaw['resources_dir'] ?? null,
+            $specMetadataRaw['cache'],
+            $specMetadataRaw['cache_partials']
+        );
+    }
+
+    /**
+     * @return SpecMetadata[]
+     */
+    public function getSpecsMetadata(): array
+    {
+        return array_map(
+            fn (string $specName, array $specMetadataRaw) => new SpecMetadata(
+                $specName,
+                $specMetadataRaw['index_path'],
+                $specMetadataRaw['resolve_path'] ?? null,
+                $specMetadataRaw['resources_dir'] ?? null,
+                $specMetadataRaw['cache'],
+                $specMetadataRaw['cache_partials']
+            ),
+            array_keys($this->configuration['specs']),
+            $this->configuration['specs']
         );
     }
 
     public function yieldFormatSpecificError(): bool
     {
         return $this->configuration['validation']['validator_options']['yield_format_specific_error'];
+    }
+
+    public function getCacheDir(): string
+    {
+        return sprintf('%s/openapi', $this->configuration['cache_dir']);
+    }
+
+    public function getCacheDirPartials(SpecMetadata $specMetadata)
+    {
+        return sprintf('%s/%s-partials', $this->getCacheDir(), $specMetadata->getName());
+    }
+
+    public function getCacheFilepath(SpecMetadata $specMetadata): string
+    {
+        return sprintf('%s/%s.php', $this->getCacheDir(), $specMetadata->getName());
+    }
+
+    public function getCacheFilepathPartial(SpecMetadata $specMetadata, string $partialName): string
+    {
+        return sprintf('%s/%s.php', $this->getCacheDirPartials($specMetadata), $partialName);
     }
 }
